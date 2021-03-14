@@ -1,0 +1,39 @@
+{
+  "name": "weatherapi",
+  "version": "1.0.0",
+  "description": "It allows to garther data to MongoDB and alter result for for information gathered from weather API.",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaskier/weatherApi.git"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "Express",
+    "MongoDB",
+    "CRUD",
+    "Cloud"
+  ],
+  "author": "Wojciech Iskierka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zaskier/weatherApi/issues"
+  },
+  "homepage": "https://github.com/zaskier/weatherApi#readme",
+  "devDependencies": {
+    "eslint": "^7.22.0",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.15"
+  }
+}
