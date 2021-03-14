@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express( );
-const db = mongoose.connect('mongodb://localhost/weather');
+if (process.env.ENV === 'Test') {
+	console.log('This is a test');
+	const db = mongoose.connect('mongodb://localhost/diary_Test');
+} else {
+	console.log('This is for real');
+	const db = mongoose.connect('mongodb://localhost/diary-Prod');
+}
 // eslint-disable-next-line no-undef
 const port = process.env.PORT || 8080;
 const Weather = require('./models/weatherModel');
@@ -22,3 +28,4 @@ app.get('/', (req, res)=>{
 app.listen(port, ()=>{
 	console.log(`Running on Port : ${port}` );
 });
+module.exports = app;
