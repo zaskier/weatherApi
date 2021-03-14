@@ -1,30 +1,11 @@
 const express = require('express');
-
+const weatherController = require('../controllers/weatherController.js');
 function routes(Weather){
 	const weatherRouter= express.Router();
+	const controller = weatherController(Weather);
 	weatherRouter.route('/weather')
-		.get((req, res)=>{
-
-			const query = {};
-			if (req.query._id) {
-				query._id = req.query._id;
-			}
-			Weather.find(query, (err, weather) =>{
-				if(err){
-					return res.send(err);
-				}
-				else{
-					return res.json(weather);
-				}
-			});
-		})
-		.post((req, res) => {
-			const weather = new Weather(req.body);
-			console.log('record was added');
-			console.log(weather);
-			weather.save();
-			return res.status(201).json(weather);
-		});
+		.get(controller.get)
+		.post(controller.post)
 
 	weatherRouter.use('/weather/:entryID', (req, res, next) =>{
 		Weather.findById(req.params.entryID, (err, weather) => {
@@ -33,30 +14,37 @@ function routes(Weather){
 			}
 			if(weather){
 				req.weather = weather;
-
 				return next();
 			}
 			return res.sendStatus(404);
 		});
 	});
 	weatherRouter.route('/weather/:entryID')
-		.get((req, res) => res.json(req.weather))
+		.get((req, res) => res.json(req.weather ))
 		.put((req, res) => {
-			const {weather} = req;
-			weather.userID = req.body.userID;
-			weather.location = req.body.title;
-			weather.weatherStationID = req.body.Content; //TODO replace with small letter 
-			weather.weather = req.body.weather;
-			weather.pigeonPopulationInArea = req.body.pigeonPopulationInArea;
 			req.weather.save((err) => {
 				if (err) {
 					return res.json(weather);
 				}
 				return res.json(weather);
-			});})
+			});
+			const {weather} = req;
+			weather.userID = req.body.userID;
+			weather.location = req.body.location;
+			weather.weatherStationID = req.body.weatherStationID;
+			weather.weather.shortDescription = req.body.weather.shortDescription;
+			weather.weather.temperature = req.body.weather.temperature;
+			weather.weather.humidity = req.body.weather.humidity;
+			weather.weather.pressure = req.body.weather.pressure;
+			weather.weather.visibility = req.body.weather.visibility;
+			weather.weather.windSpeed = req.body.weather.windSpeed;
+			weather.weather.windDeg = req.body.weather.windDeg;
+			weather.weather.clouds = req.body.weather.clouds;
+			weather.weather.matchedLocatioName = req.body.weather.matchedLocatioName;
+			weather.pigeonPopulationInArea = req.body.pigeonPopulationInArea;
+		})
 		.patch((req, res) =>{
 			const {weather} = req;
-			// ${typeof req.body.userID === "undefined"  ? `` : `${req.body.userID}",`}
 			if (req.body._id){
 				delete req.body._id;
 			}
@@ -68,7 +56,7 @@ function routes(Weather){
 			});
 			req.weather.save((err) => {
 				if (err) {
-					return res.json(weather);
+					return res.json(err);
 				}
 				return res.json(weather);
 			});
